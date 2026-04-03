@@ -1,11 +1,12 @@
-# file di sistema
+# System files
 .DS_Store
 Thumbs.db
 
-# cartelle/editor
+# Editor
 .vscode/
 
-# file temporanei
+# Logs
 *.log
 
-node_modules/
+# Dependencies
+node_modules

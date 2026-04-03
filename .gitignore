@@ -1,0 +1,9 @@
+# file di sistema
+.DS_Store
+Thumbs.db
+
+# cartelle/editor
+.vscode/
+
+# file temporanei
+*.log

@@ -1,0 +1,358 @@
+:root {
+  --bg: #000000;
+  --card: #0b1220;
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --accent: #60a5fa;
+  --danger: #ff6b6b;
+  --glow-color: rgba(139, 92, 246, 1); /* viola più intenso, opacità 1 */
+  --glow-soft: rgba(139, 92, 246, 0.32); /* area colorata più visibile */
+  --glow-size-x: 900px; /* larghezza radiale maggiore */
+  --glow-size-y: 320px; /* altezza radiale maggiore */
+
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    "Helvetica Neue",
+    Arial;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Card */
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  padding: 22px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.75);
+  backdrop-filter: blur(8px);
+  overflow: visible;
+}
+
+/* decorative glow layer */
+.container::before {
+  content: "";
+  position: absolute;
+  inset: -18px; /* spazio esterno aumentato */
+  border-radius: 22px;
+  background: radial-gradient(
+    var(--glow-size-x) var(--glow-size-y) at 50% 10%,
+    var(--glow-soft),
+    transparent 45%
+  );
+  filter: blur(28px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  animation: glowPulse 4s infinite ease-in-out;
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 18px;
+  box-shadow: 0 0 60px 18px var(--glow-color); /* raggio + spread aumentati */
+  opacity: 0;
+  pointer-events: none;
+  z-index: -2;
+  animation: glowFlicker 5.5s infinite steps(2, start);
+}
+
+/* Header */
+h1 {
+  margin: 0 0 14px 0;
+  font-size: 1.7rem;
+  color: var(--text);
+  letter-spacing: 0.2px;
+}
+
+/* Form */
+#task-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+#new-task {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition:
+    box-shadow 0.14s,
+    transform 0.06s;
+}
+#new-task::placeholder {
+  color: rgba(230, 238, 248, 0.45);
+}
+#new-task:focus {
+  box-shadow: 0 10px 30px rgba(96, 165, 250, 0.09);
+  transform: translateY(-1px);
+}
+#add-task {
+  padding: 12px 16px;
+  border: none;
+  background: var(--accent);
+  color: #03203c;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(96, 165, 250, 0.14);
+}
+#add-task:active {
+  transform: translateY(1px);
+}
+
+/* List */
+#tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.empty {
+  color: var(--muted);
+  padding: 12px;
+  background: transparent;
+}
+
+/* Task item */
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.task-check {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.task-text {
+  color: var(--text);
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task-text.completed {
+  text-decoration: line-through;
+  color: var(--muted);
+  opacity: 0.95;
+}
+
+/* Actions */
+.task-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.task-remove {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--danger);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.task-remove:active {
+  transform: translateY(1px);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+.modal.hidden {
+  display: none;
+}
+.modal-panel {
+  width: 100%;
+  max-width: 420px;
+  padding: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 14, 20, 0.96),
+    rgba(12, 16, 22, 0.98)
+  );
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+}
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.btn.danger {
+  background: var(--danger);
+  color: #2b0b0b;
+}
+.btn.link {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  padding: 6px 8px;
+}
+
+/* Snackbar */
+.snackbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 70;
+}
+.snackbar.hidden {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  .container {
+    padding: 16px;
+  }
+  #add-task {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+  .task-text {
+    font-size: 0.95rem;
+  }
+
+  @keyframes glowPulse {
+    0% {
+      opacity: 0;
+      transform: scale(0.995);
+    }
+    20% {
+      opacity: 0.22;
+      transform: scale(1.01);
+    } /* aumentato */
+    50% {
+      opacity: 0.16;
+      transform: scale(1);
+    }
+    80% {
+      opacity: 0.28;
+      transform: scale(1.02);
+    } /* aumentato */
+    100% {
+      opacity: 0;
+      transform: scale(0.995);
+    }
+  }
+
+  @keyframes glowFlicker {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    8% {
+      opacity: 0.4;
+      transform: translateY(-1px);
+    } /* piú acceso */
+    18% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    40% {
+      opacity: 0.22;
+      transform: translateY(-0.5px);
+    }
+    60% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    80% {
+      opacity: 0.34;
+      transform: translateY(-1px);
+    } /* piú acceso */
+    100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+  }
+}

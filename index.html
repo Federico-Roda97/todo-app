@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Todo App</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Todo</h1>
+      <form id="task-form" aria-label="Aggiungi task">
+        <input
+          id="new-task"
+          type="text"
+          placeholder="Aggiungi una nuova attività"
+          autocomplete="off"
+        />
+        <button id="add-task" type="submit">Aggiungi</button>
+      </form>
+      <ul id="tasks-list" aria-live="polite"></ul>
+    </main>
+
+    <!-- Confirm modal -->
+    <div
+      id="confirm-modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="modal-panel">
+        <p id="confirm-message">Confermi?</p>
+        <div class="modal-actions">
+          <button id="confirm-cancel" class="btn secondary">Annulla</button>
+          <button id="confirm-ok" class="btn danger">Elimina</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Undo snackbar -->
+    <div id="snackbar" class="snackbar hidden">
+      <span id="snack-text"></span>
+      <button id="snack-undo" class="btn link">Annulla</button>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
